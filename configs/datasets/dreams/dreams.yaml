@@ -1,0 +1,29 @@
+dataloader_cfg:
+    dataset_cfg: &dataset_cfg
+        masks_dir: masks
+        ratio: 0.5
+
+        near: 0.2
+        far: 20.0
+        bounds: [[-5.0, -5.0, -5.0], [5.0, 5.0, 5.0]]
+
+        use_aligned_cameras: True
+        force_sparse_view: True
+        view_sample: [0, 32, 1]
+        frame_sample: [0, 248, 1]
+
+        vhull_thresh: 0.9
+        count_thresh: 6
+        vhull_padding: 0.1
+        vhull_ctof_factor: 3.0
+        vhull_thresh_factor: 0.9
+        vhull_count_factor: 0.9
+        coarse_discard_masks: False
+        intersect_camera_bounds: False
+
+val_dataloader_cfg:
+    dataset_cfg:
+        <<: *dataset_cfg
+        frame_sample: [0, 248, 20]
+    sampler_cfg:
+        view_sample: [0, 32, 4]

@@ -20,11 +20,14 @@ from torch.nn import functional as F
 from torch.utils.data._utils.pin_memory import pin_memory
 from torch.utils.data._utils.collate import default_collate, default_convert
 
+from easyvolcap.utils import configure_opencv_logging
 from easyvolcap.utils.parallel_utils import parallel_execution
 from easyvolcap.utils.base_utils import dotdict
 from easyvolcap.utils.console_utils import *
 
 from enum import Enum, auto
+
+configure_opencv_logging(cv2)
 
 # Copied from enerf (maybe was in turn copied from dtu)
 

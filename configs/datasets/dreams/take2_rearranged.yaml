@@ -1,0 +1,10 @@
+configs: configs/datasets/dreams/dreams.yaml
+
+dataloader_cfg:
+    dataset_cfg: &dataset_cfg
+        data_root: data/dreams/take2_rearranged
+        images_dir: images
+
+val_dataloader_cfg:
+    dataset_cfg:
+        <<: *dataset_cfg
