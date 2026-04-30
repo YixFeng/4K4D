@@ -95,7 +95,30 @@ python scripts/tools/view_ply.py data/dreams/take2_rearranged/surfs
 
 可视化窗口中使用左右方向键切换同目录下的 `.ply` 文件。
 
-## `scripts/dreams/rearrange_frameset_seq.py`
+5. 训练 4K4D 模型。
+
+```shell
+evc-train -c configs/exps/4k4d/4k4d_take2_rearranged_r4.yaml \
+  exp_name=4k4d_take2_rearranged_r4
+```
+
+训练记录会写到 `data/record/4k4d_take2_rearranged_r4/`，验证和渲染指标会写到 `data/result/4k4d_take2_rearranged_r4/`。
+
+6. 生成支持实时渲染的 super charged 版本。
+
+```shell
+python scripts/realtime4dv/charger.py --sampler SuperChargedR4DV --exp_name 4k4d_take2_rearranged_r4 -- -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/super.yaml
+```
+
+这一步会把训练好的模型转换成 `SuperChargedR4DV` 推理版本，提前缓存实时渲染需要的点特征、颜色混合和几何参数，方便后续用 viewer 交互渲染。
+
+转换完成后可以启动 GUI 查看：
+
+```shell
+evc-gui -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/superf.yaml,configs/specs/vf0.yaml exp_name=4k4d_take2_rearranged_r4
+```
+
+## 重排数据 `scripts/dreams/rearrange_frameset_seq.py`
 
 这个脚本负责把 DREAMS 的逐帧目录转换成 EasyVolcap 使用的逐相机目录。
 
@@ -195,7 +218,7 @@ python scripts/dreams/rearrange_frameset_seq.py --no-progress
 python scripts/dreams/rearrange_frameset_seq.py --images-dir .
 ```
 
-## `scripts/dreams/cameras_json_to_easymocap_intri_extri.py`
+## 提取相机内外参 `scripts/dreams/cameras_json_to_easymocap_intri_extri.py`
 
 这个脚本负责把 DREAMS 的 `cameras.json` 转成 EasyMocap / EasyVolcap 使用的相机文件：
 

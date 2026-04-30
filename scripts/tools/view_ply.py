@@ -5,11 +5,19 @@ import numpy as np
 import open3d as o3d
 
 
+WINDOW_FAILURE_HELP = """\
+Open3D failed to create a visualization window.
+
+This viewer needs an interactive OpenGL/GLFW window. If you are running over SSH,
+inside a container, or on a headless machine, start it from a desktop session,
+enable X11 forwarding/VirtualGL, or install an Open3D build with OSMesa support.
+"""
+
 KEY_LEFT = 263
 KEY_RIGHT = 262
 KEY_A = ord("A")
 KEY_D = ord("D")
-LABEL_CELL_PX = 6
+LABEL_CELL_PX = 4
 LABEL_MARGIN_PX = 24
 
 
@@ -273,8 +281,14 @@ def main():
     )
 
     vis = o3d.visualization.VisualizerWithKeyCallback()
-    vis.create_window(window_name="Open3D PLY Browser")
-    vis.get_render_option().point_size = args.point_size
+    if not vis.create_window(window_name="Open3D PLY Browser"):
+        raise SystemExit(WINDOW_FAILURE_HELP)
+
+    render_option = vis.get_render_option()
+    if render_option is None:
+        vis.destroy_window()
+        raise SystemExit(WINDOW_FAILURE_HELP)
+    render_option.point_size = args.point_size
 
     vis.register_key_callback(KEY_LEFT, lambda v: browser.step(v, -1))
     vis.register_key_callback(KEY_RIGHT, lambda v: browser.step(v, 1))

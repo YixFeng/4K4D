@@ -2,13 +2,13 @@ configs: configs/datasets/dreams/dreams.yaml
 
 dataloader_cfg:
     dataset_cfg: &dataset_cfg
-        data_root: data/dreams/take2_rearranged
+        data_root: data/dreams/take1_rearranged
         images_dir: images
-        frame_sample: [0, 248, 1]
+        frame_sample: [0, 663, 1]
 
         vhull_thresh: 0.90
         count_thresh: 8
-        vhull_padding: 0.03
+        vhull_padding: 0.05
         vhull_ctof_factor: 3.0
         vhull_thresh_factor: 1.0
         vhull_count_factor: 1.0
@@ -16,4 +16,4 @@ dataloader_cfg:
 val_dataloader_cfg:
     dataset_cfg:
         <<: *dataset_cfg
-        frame_sample: [0, 248, 20]
+        frame_sample: [0, 663, 20]

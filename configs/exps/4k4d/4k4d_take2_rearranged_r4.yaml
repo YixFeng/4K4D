@@ -1,0 +1,17 @@
+configs:
+    - configs/base.yaml # default arguments for the whole codebase
+    - configs/models/r4dv.yaml # network model configuration
+    - configs/datasets/dreams/take2_rearranged_obj.yaml # dataset usage configuration
+    - configs/specs/mask.yaml # specific usage configuration
+
+dataloader_cfg: &dataloader_cfg
+    dataset_cfg: &dataset_cfg
+        vhulls_dir: surfs
+
+val_dataloader_cfg:
+    <<: *dataloader_cfg
+    dataset_cfg:
+        <<: *dataset_cfg
+
+# prettier-ignore
+exp_name: {{fileBasenameNoExtension}}

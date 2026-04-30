@@ -163,7 +163,7 @@ class Viewer(VolumetricVideoViewer):
         return None, None
 
     def draw_banner_gui(self, batch: dotdict = dotdict(), output: dotdict = dotdict()):
-        imgui.push_font(self.bold_font)
+        self.push_font(self.bold_font)
         imgui.text(f'EasyVolcap WebSocket Viewer')
         imgui.text(f'Running on remote: {uri}')
         imgui.pop_font()

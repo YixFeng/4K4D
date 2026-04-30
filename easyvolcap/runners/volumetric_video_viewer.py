@@ -343,6 +343,13 @@ class VolumetricVideoViewer:
         add_debug_text_2d(viewer.dynamic.debug_text_2d_loc, text, color)
         viewer.dynamic.debug_text_2d_loc = ImVec2(0, viewer.dynamic.debug_text_2d_loc.y + 20)
 
+    @staticmethod
+    def push_font(font):
+        try:
+            imgui.push_font(font, 0.0)
+        except TypeError:
+            imgui.push_font(font)
+
     def draw_cameras(self,
                      Ks: torch.Tensor,
                      Rs: torch.Tensor,
@@ -353,7 +360,7 @@ class VolumetricVideoViewer:
                      axis_size: float = 0.025,
                      src_inds: torch.Tensor = None):
         # Add to imgui rendering list
-        imgui.push_font(self.bold_font)
+        self.push_font(self.bold_font)
 
         # TODO: Slow CPU computation
         for i, (K, R, T) in enumerate(zip(Ks, Rs, Ts)):  # render cameras of this frame
@@ -495,7 +502,7 @@ class VolumetricVideoViewer:
             if network_available:
                 self.quad.use_quad_cuda = imgui_toggle.toggle('##cuda_gl_interop', self.quad.use_quad_cuda, config=self.static.toggle_ios_style)[1]
                 imgui.same_line()
-                imgui.push_font(self.bold_font)
+                self.push_font(self.bold_font)
                 colored_wrapped_text(0x55cc33ff, 'Use CUDA-GL interop')
                 tooltip('If your system does not support CUDA-GL interop (WSL2), please disable this option.')
                 imgui.pop_font()
@@ -577,7 +584,7 @@ class VolumetricVideoViewer:
         if not self.quad.use_quad_cuda:
             gpu_cpu_gpu_msg = f'Not using CUDA-GL interop for low-latency upload, will lead to degraded performance. Try using native Windows or Linux for CUDA-GL interop'
 
-            imgui.push_font(self.bold_font)
+            self.push_font(self.bold_font)
             colored_wrapped_text(0xff3355ff, gpu_cpu_gpu_msg)
             self.add_debug_text_2d(gpu_cpu_gpu_msg, 0xff3355ff)
             imgui.pop_font()
@@ -914,7 +921,7 @@ class VolumetricVideoViewer:
     def draw_banner_gui(self, batch: dotdict = dotdict(), output: dotdict = dotdict()):
 
         # Misc information
-        imgui.push_font(self.bold_font)
+        self.push_font(self.bold_font)
         imgui.text(f'EasyVolcap Framework -- by zju3dv')
         imgui.text(f'Running on {self.static.name}: {self.static.device}')
         imgui.text(f'FPS       : {self.static.fps:7.3f} FPS')
@@ -987,7 +994,7 @@ class VolumetricVideoViewer:
         imgui.backends.opengl3_new_frame()
         imgui.backends.glfw_new_frame()
         imgui.new_frame()
-        imgui.push_font(self.default_font)
+        self.push_font(self.default_font)
 
         # States
         self.static.playing_time = self.camera_path.playing_time  # Remember this, if changed, update camera
