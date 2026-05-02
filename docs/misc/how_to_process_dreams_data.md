@@ -99,7 +99,7 @@ python scripts/tools/view_ply.py data/dreams/take2_rearranged/surfs
 
 ```shell
 evc-train -c configs/exps/4k4d/4k4d_take2_rearranged_r4.yaml \
-  exp_name=4k4d_take2_rearranged_r4
+  exp_name=4k4d_take2_rearranged_r4_tightvhulls
 ```
 
 训练记录会写到 `data/record/4k4d_take2_rearranged_r4/`，验证和渲染指标会写到 `data/result/4k4d_take2_rearranged_r4/`。
@@ -107,7 +107,7 @@ evc-train -c configs/exps/4k4d/4k4d_take2_rearranged_r4.yaml \
 6. 生成支持实时渲染的 super charged 版本。
 
 ```shell
-python scripts/realtime4dv/charger.py --sampler SuperChargedR4DV --exp_name 4k4d_take2_rearranged_r4 -- -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/super.yaml
+python scripts/realtime4dv/charger.py --sampler SuperChargedR4DV --exp_name 4k4d_take2_rearranged_r4_tightvhulls -- -c data/record/4k4d_take2_rearranged_r4_tightvhulls/4k4d_take2_rearranged_r4_tightvhulls_1777579920.yaml,configs/specs/super.yaml
 ```
 
 这一步会把训练好的模型转换成 `SuperChargedR4DV` 推理版本，提前缓存实时渲染需要的点特征、颜色混合和几何参数，方便后续用 viewer 交互渲染。
@@ -115,14 +115,14 @@ python scripts/realtime4dv/charger.py --sampler SuperChargedR4DV --exp_name 4k4d
 转换完成后可以启动 GUI 查看：
 
 ```shell
-evc-gui -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/superf.yaml,configs/specs/vf0.yaml exp_name=4k4d_take2_rearranged_r4
+evc-gui -c data/record/4k4d_take2_rearranged_r4_tightvhulls/4k4d_take2_rearranged_r4_tightvhulls_1777579920.yaml,configs/specs/superf.yaml,configs/specs/vf0.yaml exp_name=4k4d_take2_rearranged_r4_tightvhulls
 ```
 
 如果需要直接测试渲染单个原始相机视角，并保存 22 fps 视频，可以用：
 
 ```shell
-evc-test -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/superf.yaml,configs/specs/eval.yaml \
-  exp_name=4k4d_take2_rearranged_r4 \
+evc-test -c data/record/4k4d_take2_rearranged_r4_tightvhulls/4k4d_take2_rearranged_r4_tightvhulls_1777579920.yaml,configs/specs/superf.yaml,configs/specs/eval.yaml \
+  exp_name=4k4d_take2_rearranged_r4_tightvhulls \
   val_dataloader_cfg.sampler_cfg.view_sample=1,2,1 \
   runner_cfg.visualizer_cfg.store_video_output=True \
   runner_cfg.visualizer_cfg.video_fps=22 \
