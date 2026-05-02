@@ -130,7 +130,7 @@ def generate_video(result_str: str,
     ] if fps > 0 else []) + ([
         '-f', 'image2',
         '-pattern_type', 'glob',
-    ] if '*' in result_str else []) + ([
+    ] if any(c in result_str for c in '*?[') else []) + ([
         '-r', fps,
     ] if fps > 0 else []) + [
         '-nostdin',  # otherwise you cannot chain commands together

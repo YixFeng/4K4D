@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from string import Formatter
 from torch import nn
 from os.path import join, dirname
 from typing import List, Tuple, Union, Type
@@ -78,6 +79,28 @@ class VolumetricVideoVisualizer:  # this should act as a base class for other ty
         if self.verbose:
             types = '{' + ','.join([t.name for t in self.types]) + '}'
             log(f'Visualization output: {blue(join(self.result_dir, dirname(self.img_pattern).format(type=types)))}')  # use yellow for output path
+
+    @staticmethod
+    def _numeric_glob(format_spec: str, value: int):
+        width = ''.join(c for c in format_spec if c.isdigit())
+        width = int(width) if width else len(str(value))
+        return '[0-9]' * max(width, 1)
+
+    def image_glob(self, type: Visualization):
+        parts = []
+        for literal, field, format_spec, conversion in Formatter().parse(self.img_pattern):
+            parts.append(literal)
+            if field is None:
+                continue
+            if field == 'type':
+                parts.append(type.name)
+            elif field == 'frame':
+                parts.append(self._numeric_glob(format_spec, self.frame))
+            elif field == 'camera':
+                parts.append(self._numeric_glob(format_spec, self.camera))
+            else:
+                parts.append('*')
+        return join(self.result_dir, ''.join(parts))
 
     def generate_type(self, output: dotdict, batch: dotdict, type: Visualization = Visualization.RENDER):
         # Extract the renderable image from output and batch
@@ -316,8 +339,8 @@ class VolumetricVideoVisualizer:  # this should act as a base class for other ty
         if self.store_video_output:
             for type in self.types:
                 result_dir = dirname(join(self.result_dir, self.img_pattern)).format(type=type.name, camera=self.camera, frame=self.frame)
-                result_str = f'"{result_dir}/*{self.vis_ext}"'
-                output_path = result_str[1:].split('*')[0][:-1] + '.mp4'
+                result_str = f'"{self.image_glob(type)}"'
+                output_path = result_dir + '.mp4'
                 try:
                     generate_video(result_str, output_path, fps=self.video_fps)  # one video for one type?
                 except RuntimeError as e:

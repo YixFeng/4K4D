@@ -2,7 +2,7 @@ configs: configs/datasets/dreams/take2_rearranged.yaml
 
 dataloader_cfg: &dataloader_cfg
     dataset_cfg: &dataset_cfg
-        bounds: [[-0.3000, -0.3500, -1.1600], [0.5150, 0.6950, 0.6750]] # !: BATCH
+        bounds: [[-0.3000, -0.3550, -1.1650], [0.5200, 0.6950, 0.6750]] # !: BATCH
 
 val_dataloader_cfg:
     <<: *dataloader_cfg

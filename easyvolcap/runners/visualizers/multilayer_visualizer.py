@@ -51,9 +51,10 @@ class MultilayerVisualizer(VolumetricVideoVisualizer):  # this should act as a b
             self.img_pattern = f'{{type}}/frame{{frame:04d}}_camera{{camera:04d}}{self.vis_ext}'
             result_dir = dirname(join(self.result_dir, self.img_pattern))\
                 .format(type=type.name, camera=self.camera, frame=self.frame)
-            result_str = f'"{result_dir}/*{self.vis_ext}"'
+            result_str = f'"{self.image_glob(type)}"'
 
-            output_path = generate_video(result_str, self.video_fps)  # one video for one type?
+            output_path = result_dir + '.mp4'
+            generate_video(result_str, output_path, fps=self.video_fps)  # one video for one type?
             log(f'Video generated: {yellow(output_path)}')
 
             # Generate video for each layer
@@ -61,9 +62,10 @@ class MultilayerVisualizer(VolumetricVideoVisualizer):  # this should act as a b
                 self.img_pattern = f'LAYER_{i}/{{type}}/frame{{frame:04d}}_camera{{camera:04d}}{self.vis_ext}'
                 result_dir = dirname(join(self.result_dir, self.img_pattern))\
                     .format(type=type.name, camera=self.camera, frame=self.frame)
-                result_str = f'"{result_dir}/*{self.vis_ext}"'
+                result_str = f'"{self.image_glob(type)}"'
 
-                output_path = generate_video(result_str, self.video_fps)
+                output_path = result_dir + '.mp4'
+                generate_video(result_str, output_path, fps=self.video_fps)
                 log(f'Video generated: {yellow(output_path)}')
 
             # TODO: use timg to visaulize the video / image on disk to the commandline

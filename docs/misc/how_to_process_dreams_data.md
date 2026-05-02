@@ -118,6 +118,19 @@ python scripts/realtime4dv/charger.py --sampler SuperChargedR4DV --exp_name 4k4d
 evc-gui -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/superf.yaml,configs/specs/vf0.yaml exp_name=4k4d_take2_rearranged_r4
 ```
 
+如果需要直接测试渲染单个原始相机视角，并保存 22 fps 视频，可以用：
+
+```shell
+evc-test -c data/record/4k4d_take2_rearranged_r4/4k4d_take2_rearranged_r4_1777440586.yaml,configs/specs/superf.yaml,configs/specs/eval.yaml \
+  exp_name=4k4d_take2_rearranged_r4 \
+  val_dataloader_cfg.sampler_cfg.view_sample=1,2,1 \
+  runner_cfg.visualizer_cfg.store_video_output=True \
+  runner_cfg.visualizer_cfg.video_fps=22 \
+  runner_cfg.visualizer_cfg.save_tag=cam01_22fps
+```
+
+这里 `val_dataloader_cfg.sampler_cfg.view_sample=0,1,1` 表示只渲染原始相机 `cam00`。`configs/specs/superf.yaml` 使用 super charged 实时推理版本，`configs/specs/eval.yaml` 只输出 `RENDER` 结果。README 中的 `configs/specs/spiral.yaml` 和 `configs/specs/ibr.yaml` 用于 novel-view spiral path 渲染，不是单个原始相机视角必须的配置。
+
 ## 重排数据 `scripts/dreams/rearrange_frameset_seq.py`
 
 这个脚本负责把 DREAMS 的逐帧目录转换成 EasyVolcap 使用的逐相机目录。

@@ -61,6 +61,8 @@ commentjson
 
 # to support visualization, we need:
 nvitop
+setuptools_scm
+scikit-build-core
 gpustat @ git+https://github.com/wookayin/gpustat
 # for winding_number_remesh
 nvdiffrast @ git+https://github.com/NVlabs/nvdiffrast
